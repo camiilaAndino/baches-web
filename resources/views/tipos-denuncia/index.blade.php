@@ -20,8 +20,8 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div class="overflow-x-auto p-4">
+                    <table id="tipos-denuncia-table" class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Nombre') }}</th>
@@ -30,7 +30,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($tiposDenuncia as $tipoDenuncia)
+                            @foreach ($tiposDenuncia as $tipoDenuncia)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $tipoDenuncia->nombre }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-500">{{ $tipoDenuncia->descripcion }}</td>
@@ -59,21 +59,37 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="px-6 py-4 text-sm text-gray-500 text-center">{{ __('No hay tipos de denuncia registrados.') }}</td>
-                                </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-
-                @if ($tiposDenuncia->hasPages())
-                    <div class="px-6 py-4">
-                        {{ $tiposDenuncia->links() }}
-                    </div>
-                @endif
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.datatables.net/v/dt/dt-3.0.3/datatables.min.js"></script>
+        <script>
+            new DataTable('#tipos-denuncia-table', {
+                language: {
+                    emptyTable: 'No hay tipos de denuncia registrados.',
+                    zeroRecords: 'No se encontraron coincidencias.',
+                    info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+                    infoEmpty: 'Mostrando 0 a 0 de 0 registros',
+                    infoFiltered: '(filtrado de _MAX_ registros totales)',
+                    lengthMenu: 'Mostrar _MENU_ registros',
+                    search: 'Buscar:',
+                    paginate: {
+                        first: 'Primero',
+                        last: 'Último',
+                        next: 'Siguiente',
+                        previous: 'Anterior',
+                    },
+                },
+                columnDefs: [
+                    { orderable: false, searchable: false, targets: -1 },
+                ],
+            });
+        </script>
+    @endpush
 </x-app-layout>

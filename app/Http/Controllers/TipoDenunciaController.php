@@ -11,7 +11,7 @@ class TipoDenunciaController extends Controller
 {
     public function index(): View
     {
-        $tiposDenuncia = TipoDenuncia::orderBy('nombre')->paginate(15);
+        $tiposDenuncia = TipoDenuncia::orderBy('nombre')->get();
 
         return view('tipos-denuncia.index', compact('tiposDenuncia'));
     }
