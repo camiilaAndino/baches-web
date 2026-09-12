@@ -44,8 +44,10 @@ class TipoDenunciaController extends Controller
         return redirect()->route('tipos-denuncia.index')->with('status', 'Tipo de denuncia actualizado correctamente.');
     }
 
-    public function destroy(TipoDenuncia $tipoDenuncia): RedirectResponse
+    public function destroy(Request $request, TipoDenuncia $tipoDenuncia): RedirectResponse
     {
+        abort_unless($request->user()->puedeEliminarODesactivar(), 403, 'No tenés permiso para eliminar.');
+
         $tipoDenuncia->delete();
 
         return redirect()->route('tipos-denuncia.index')->with('status', 'Tipo de denuncia eliminado correctamente.');

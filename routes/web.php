@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DenunciaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TipoDenunciaController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -20,11 +21,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/denuncias', [DenunciaController::class, 'index'])->name('denuncias.index');
-    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+
+    Route::patch('/usuarios/{user}/estado', [UsuarioController::class, 'toggleEstado'])->name('usuarios.estado');
+    Route::resource('usuarios', UsuarioController::class)
+        ->parameters(['usuarios' => 'user'])
+        ->except(['show', 'destroy']);
 
     Route::resource('tipos-denuncia', TipoDenunciaController::class)
         ->parameters(['tipos-denuncia' => 'tipoDenuncia'])
         ->except(['show']);
+
+    Route::resource('roles', RoleController::class)->except(['show', 'create', 'store']);
 });
 
 require __DIR__.'/auth.php';
